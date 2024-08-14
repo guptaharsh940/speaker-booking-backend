@@ -16,6 +16,7 @@ export const addSpeakerProfile = async (req: Request, res: Response) => {
         const speakerProfile = await Speaker.create({ expertise, pricePerSession, userId });
         res.status(201).json({ message: 'Speaker profile created successfully.', speakerProfile });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: 'Failed to create speaker profile.' });
     }
 };
@@ -23,7 +24,7 @@ export const addSpeakerProfile = async (req: Request, res: Response) => {
 // Get all speakers
 export const getSpeakers = async (_req: Request, res: Response) => {
     try {
-        const speakers = await Speaker.findAll({ include: [User] });
+        const speakers = await Speaker.findAll({include: [{ model: User, as: 'user', attributes:['id','firstName','lastName','email'] }]});
         res.status(200).json(speakers);
     } catch (error) {
         res.status(500).json({ error: 'Failed to retrieve speakers.' });

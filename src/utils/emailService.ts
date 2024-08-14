@@ -1,4 +1,6 @@
 import nodemailer from 'nodemailer';
+import User from '../models/user';
+import Speaker from '../models/speaker';
 
 // Configure the transporter for sending emails
 const transporter = nodemailer.createTransport({
@@ -14,8 +16,8 @@ export const sendOtpEmail = async (to: string, otp: number) => {
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to,
-        subject: 'Your OTP for Account Verification',
-        text: `Your OTP for account verification is ${otp}. This OTP is valid for 10 minutes.`,
+        subject: 'Verify your Account',
+        text: `Your One Time Password for account verification is ${otp}. (Valid for 10 minutes)`,
     };
 
     try {
@@ -30,15 +32,19 @@ export const sendOtpEmail = async (to: string, otp: number) => {
 // Send booking confirmation email
 export const sendBookingConfirmationEmail = async (
     userId: number,
-    speakerId: string,
+    speakerId: number,
     date: string,
     timeSlot: string
 ) => {
+    const user = await User.findByPk(userId);
+    const speaker =await Speaker.findByPk(speakerId);
+    const speakerUser = await User.findByPk(speaker?.userId);
+    const userEmail = user?.email;
     const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: 'recipient@example.com', // Set recipient email dynamically
+        to: userEmail, 
         subject: 'Booking Confirmation',
-        text: `Your booking with speaker ID ${speakerId} on ${date} at ${timeSlot} is confirmed.`,
+        text: `Your booking with speaker ${speakerUser?.firstName} ${speakerUser?.lastName} on ${date} at ${timeSlot} is confirmed.`,
     };
 
     try {

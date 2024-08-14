@@ -1,5 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from './index';
+import User from './user';
+import Speaker from './speaker';
 
 interface BookingAttributes {
     id: number;
@@ -32,10 +34,18 @@ Booking.init(
         userId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references:{
+                model:User,
+                key:'id',
+            }
         },
         speakerId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references:{
+                model:Speaker,
+                key:'id',
+            }
         },
         date: {
             type: DataTypes.DATEONLY,
@@ -51,5 +61,8 @@ Booking.init(
         modelName: 'Booking',
     }
 );
+
+Booking.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Booking.belongsTo(Speaker, { foreignKey: 'speakerId', as: 'speaker' });
 
 export default Booking;

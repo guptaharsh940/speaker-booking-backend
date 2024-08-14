@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from './index';
+import User from './user';
 
 interface SpeakerAttributes {
     id: number;
@@ -38,12 +39,19 @@ Speaker.init(
         userId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references:{
+                model: User,
+                key:"id",
+            }
         },
     },
     {
         sequelize,
-        modelName: 'Speaker',
+        modelName: 'Speaker'
     }
 );
-
+Speaker.belongsTo(User, {
+    foreignKey: 'userId',
+    as: 'user',
+});
 export default Speaker;

@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
+import swaggerdoc from '../openapi.json'
+import swaggerui from 'swagger-ui-express';
 
 // Import routes
 import authRoutes from './routes/authRoutes';
@@ -20,6 +22,8 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/api-docs',swaggerui.serve,swaggerui.setup(swaggerdoc))
+
 
 // Basic route to check server status
 app.get('/', (req: Request, res: Response) => {

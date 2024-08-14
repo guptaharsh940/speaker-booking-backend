@@ -1,18 +1,21 @@
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import { sendOtpEmail } from '../utils/emailService';
+import {setOtp,getOtp} from '../utils/otpcheck';
 
 export const register = async (req: Request, res: Response) => {
     const { firstName, lastName, email, password, userType } = req.body;
     try {
         const existingUser = await User.findOne({ where: { email } });
+        
         if (existingUser) {
             return res.status(400).json({ error: 'Email already in use.' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        console.log(hashedPassword);
         const user = await User.create({
             firstName,
             lastName,
@@ -21,9 +24,10 @@ export const register = async (req: Request, res: Response) => {
             isVerified: false,
             userType,
         });
-
+        console.log(JSON.stringify(user));
         // Generate and send OTP for verification
         const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+        setOtp(user.id,otp);
         await sendOtpEmail(email, otp);
 
         res.status(201).json({ message: 'User registered. Please verify your email with the OTP.', userId: user.id });
@@ -33,10 +37,12 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const verifyOtp = async (req: Request, res: Response) => {
+    
     const { userId, otp } = req.body;
     try {
-        // Validate OTP here (implementation depends on your OTP storage method)
-        // Assuming OTP is valid, verify the user's email
+        if(getOtp(userId as number)!=otp){
+            return res.status(500).json({ error: 'Incorrect OTP' });
+        }
         const user = await User.findByPk(userId);
         if (!user) {
             return res.status(404).json({ error: 'User not found.' });

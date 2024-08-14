@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from './index';
+import Speaker from './speaker';
 
 interface UserAttributes {
     id: number;
@@ -64,5 +65,6 @@ User.init(
         modelName: 'User',
     }
 );
+
 
 export default User;
