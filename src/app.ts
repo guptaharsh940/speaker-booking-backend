@@ -10,7 +10,8 @@ import swaggerui from 'swagger-ui-express';
 import authRoutes from './routes/authRoutes';
 import speakerRoutes from './routes/speakerRoutes';
 import bookingRoutes from './routes/bookingRoutes';
-
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerOptions from './swaggerapi';
 // Initialize environment variables
 dotenv.config();
 
@@ -22,7 +23,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/api-docs',swaggerui.serve,swaggerui.setup(swaggerdoc, {customCssUrl:"https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css"}))
+app.use('/api-docs',swaggerui.serve,swaggerui.setup(swaggerJSDoc(swaggerOptions), {customCssUrl:"https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css"}))
 
 
 // Basic route to check server status
