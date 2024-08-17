@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import Speaker from '../models/speaker';
 import User from '../models/user';
-
+import CustomRequest from '../utils/CustomRequest';
 // Add a new speaker profile
 export const addSpeakerProfile = async (req: Request, res: Response) => {
     const { expertise, pricePerSession } = req.body;
-    const userId = req.userId; // Assuming userId is set in middleware
+    const customReq = req as CustomRequest; 
+    const userId = customReq.userId; // Assuming userId is set in middleware
 
     try {
         const user = await User.findByPk(userId);
@@ -24,7 +25,7 @@ export const addSpeakerProfile = async (req: Request, res: Response) => {
 // Get all speakers
 export const getSpeakers = async (_req: Request, res: Response) => {
     try {
-        const speakers = await Speaker.findAll({include: [{ model: User, as: 'user', attributes:['id','firstName','lastName','email'] }]});
+        const speakers = await Speaker.findAll({ include: [{ model: User, as: 'user', attributes: ['id', 'firstName', 'lastName', 'email'] }] });
         res.status(200).json(speakers);
     } catch (error) {
         res.status(500).json({ error: 'Failed to retrieve speakers.' });

@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-
+import CustomRequest from '../utils/CustomRequest';
 interface JwtPayload {
     userId: number;
     userType: string;
 }
+
+
 
 // Verify token for protected routes
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
@@ -16,8 +18,9 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
-        req.userId = decoded.userId;
-        req.userType = decoded.userType;
+        const custReq = req as CustomRequest;
+        custReq.userId = decoded.userId;
+        custReq.userType = decoded.userType;
         next();
     } catch (err) {
         res.status(400).json({ error: 'Invalid token.' });
@@ -26,7 +29,8 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
 
 // Verify speaker role for speaker-only routes
 export const verifySpeaker = (req: Request, res: Response, next: NextFunction) => {
-    if (req.userType !== 'speaker') {
+    const custReq = req as CustomRequest;
+    if (custReq.userType !== 'speaker') {
         return res.status(403).json({ error: 'Access denied. Speakers only.' });
     }
     next();

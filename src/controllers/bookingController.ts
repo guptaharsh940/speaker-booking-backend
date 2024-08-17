@@ -5,6 +5,7 @@ import { sendBookingConfirmationEmail } from '../utils/emailService';
 import { createGoogleCalendarEvent } from '../utils/calendarService';
 import { error } from 'console';
 import User from '../models/user';
+import CustomRequest from '../utils/CustomRequest';
 
 
 function validateTime(time:string) {
@@ -31,7 +32,8 @@ function validateTime(time:string) {
 // Book a session with a speaker
 export const bookSession = async (req: Request, res: Response) => {
     const { speakerId, date, timeSlot } = req.body;
-    const userId = req.userId; // Assuming userId is set in middleware
+    const custReq = req as CustomRequest;
+    const userId = custReq.userId; // Assuming userId is set in middleware
 
     try {
         if(!validateTime(timeSlot)){
