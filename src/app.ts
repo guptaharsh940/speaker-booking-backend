@@ -23,7 +23,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/api-docs', swaggerui.serve, swaggerui.setup(swaggerdoc))
+app.use('/api-docs', swaggerui.serve, swaggerui.setup(swaggerdoc, { customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css" }))
 
 
 // Basic route to check server status
