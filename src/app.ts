@@ -10,8 +10,7 @@ import swaggerui from 'swagger-ui-express';
 import authRoutes from './routes/authRoutes';
 import speakerRoutes from './routes/speakerRoutes';
 import bookingRoutes from './routes/bookingRoutes';
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerOptions from './swaggerapi';
+
 // Initialize environment variables
 dotenv.config();
 
