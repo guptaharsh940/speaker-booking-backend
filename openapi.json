@@ -8,6 +8,10 @@
     {
       "url": "https://speaker-booking-backend.vercel.app",
       "description": "Vercel Deployment Server"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Server"
     }
   ],
   "components": {

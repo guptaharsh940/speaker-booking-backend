@@ -25,7 +25,7 @@ export const addSpeakerProfile = async (req: Request, res: Response) => {
 // Get all speakers
 export const getSpeakers = async (_req: Request, res: Response) => {
     try {
-        const speakers = await Speaker.findAll({ include: [{ model: User, as: 'user', attributes: ['id', 'firstName', 'lastName', 'email'] }] });
+        const speakers = await Speaker.findAll({ include: [{ model: User, as: 'user', attributes: ['id', 'firstName', 'lastName', 'email'] }], attributes:['id','expertise','pricePerSession'] });
         res.status(200).json(speakers);
     } catch (error) {
         res.status(500).json({ error: 'Failed to retrieve speakers.' });
